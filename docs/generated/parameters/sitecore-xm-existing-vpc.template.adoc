@@ -1,0 +1,82 @@
+
+.Network configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|VPC CIDR
+(`VPCCIDR`)|`10.0.0.0/16`|CIDR Block for the VPC|VPC ID
+(`VPCID`)|`**__Requires input__**`|ID of the VPC (e.g., vpc-0343606e)|Private subnet 1A ID
+(`PrivateSubnet1A`)|`**__Requires input__**`|ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)|Private subnet 2A ID
+(`PrivateSubnet2A`)|`**__Requires input__**`|ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)|Public subnet 1 ID
+(`PublicSubnet1`)|`**__Requires input__**`|Public subnet in Availability Zone 1|Public subnet 2 ID
+(`PublicSubnet2`)|`**__Requires input__**`|Public subnet in Availability Zone 2
+|===
+.Sitecore Networking Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Content delivery FQDN
+(`CDDNSName`)|`**__Requires input__**`|Fully qualified domain name for the content delivery role (e.g., home.example.com).|Content management FQDN
+(`CMDNSName`)|`**__Requires input__**`|Fully qualified domain name for the content management role.|Identity server FQDN
+(`ISDNSName`)|`**__Requires input__**`|Fully qualified domain name for the identity server role.|Internal DNS suffix
+(`IntDNS`)|`**__Blank string__**`|[Optional] Internal DNS name. If left blank, one is generated for you. If you have a private Route 53 hosted zone or a private managed DNS connected to your VPC, please provide the DNS suffix of the hosted zone.|Internal Route 53 hosted zone ID
+(`IntVPCR53Zone`)|`**__Blank string__**`|[Optional] If you already have a private Route 53 hosted zone connected to your VPC, please provide the Route 53 hosted zone ID|Private (non-Route 53) DNS
+(`VPCPrivateDNS`)|`False`|Set to true if you have your own provided DNS servers for your VPC. Should you have your own DNS servers, you must create Canonical Name Record (CNAME) entries for the Sitecore roles. Please see the deloyment guide for details. set to false if you have a private Route 53 hosted zone connected to your VPC.|External ACM ARN
+(`ExternalCertificateARN`)|`**__Requires input__**`|[Optional] Provide the Amazon Resource Name (ARN) of the wildcard certificate created in Amazon Certificate Manager. If not provided, a wildcard certificate will be created for you. If you provide an ARN, you do not need to provide details for ExternalCertFQDN or ExternalRoute53ZoneID.|External certificate domain name
+(`ExternalCertFQDN`)|`__Optional__`|[Optional] External domain name for the Sitecore deployment (e.g., example.com). This is created in ACM as a wildcard certificate (e.g., *.example.com) if no value is provided for ExternalCertificateARN.|External Route 53 zone ID
+(`ExternalR53ZoneID`)|`__Optional__`|[Optional] Provide the Route 53–hosted zone ID for ExternalCertFQDN if you require certificate validation to be done via DNS. If no Route 53 hosted zone ID is provided, validation is done via email.
+|===
+.Sitecore Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Minimum content delivery instances
+(`CDMinSize`)|`1`|Minimum number of content delivery instances available.|Maximum content delivery instances
+(`CDMaxSize`)|`3`|Maximum number of content delivery instances available.|Desired content delivery instances
+(`CDDesiredCapacity`)|`2`|Desired number of content delivery instances available.|Content delivery
+(`CDInstanceType`)|`m5a.xlarge`|Content delivery instance type.|Content delivery scaling metric
+(`CDScalingMetric`)|`ASGAverageCPUUtilization`|Metric used to determine scaling of the content delivery role.|Content delivery scaling metric value
+(`CDScalingMetricValue`)|`70`|Value required for the scaling metric (For ASGAverageNetworkIn this value is in bytes).|Minimum content management instances
+(`CMMinSize`)|`1`|Minimum number of content management instances available.|Maximum content management instances
+(`CMMaxSize`)|`2`|Maximum number of content management instances available.|Content management, identity, reference data
+(`CmIdRdInstanceType`)|`m5a.xlarge`|Instance type, applied to the roles of content management, identity, and reference data.|Content management scaling metric
+(`CMScalingMetric`)|`ASGAverageCPUUtilization`|Metric used to determine scaling of the content management role.|Content management scaling metric value
+(`CMScalingMetricValue`)|`70`|Value required for the scaling metric (For ASGAverageNetworkIn this value is in bytes).|EC2 Key Pair for Sitecore instances
+(`SitecoreKeyPair`)|`**__Requires input__**`|EC2 Key Pair to use for the Sitecore instances.|Sitecore installation prefix
+(`SitecorePrefix`)|`**__Requires input__**`|Prefix to be used for the Sitecore installation. This is limited to 8 characters.|Sitecore resources S3 Bucket
+(`SitecoreS3Bucket`)|`**__Requires input__**`|S3 Bucket name where the Sitecore 9.3 resources are located (installation files, license file, etc.). This deployment will put objects into this bucket.|Sitecore installation files prefix
+(`SCResourcesPrefix`)|`resources/`|Prefix in the S3 Bucket for the Sitecore install files (eg: resources/).|Sitecore license file prefix
+(`SCLicensePrefix`)|`license/`|Prefix in the S3 Bucket for the license.zip file (eg: license/).|Solr server/cluster URL
+(`SOLRUrl`)|`**__Blank string__**`|[Optional] URL of your Solr server/cluster. If no URL is provided a development Solr instance will be created for this Sitecore deployment. Note: This development Solr instance should not be used within a production environment.|Solr cores prefix
+(`SOLRCorePrefix`)|`**__Requires input__**`|If you provided a Solr URL, this is the prefix of your pre-configured Solr cores. If no Solr URL provided, this is the prefix used for the Solr cores on the development Solr instance.|Sitecore environment type
+(`EnvironmentType`)|`Production`|Type of Sitecore deployment.|Sitecore log level
+(`SCLogLevel`)|`Information`|Sitecore deployment configured log level.|Email notifications
+(`EmailNotifications`)|`**__Requires input__**`|Email address for receiving Sitecore auto scaling notifications.|Lambda S3 bucket name
+(`LambdaZipsBucketName`)|`**__Blank string__**`|[Optional] Name of the S3 bucket where the Lambda zip files should be placed. If you leave this parameter blank, an S3 bucket will be created.
+|===
+.SQL Server configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Database instance class
+(`DBInstanceClass`)|`db.r4.2xlarge`|Name of the compute and memory capacity class of the database instance.|Database auto minor version upgrade
+(`DBAutoMinorVersionUpgrade`)|`false`|If set to true, minor engine upgrades are applied to the database instance. If set to false, minor engine upgrades are not applied to the database instance.|MSSQL database engine edition
+(`SQLEngineEdition`)|`sqlserver-se`|MSSQL database engine edition.|MSSQL database engine version
+(`SQLEngineVersion`)|`14.00.3381.3.v1`|MSSQL database engine version.|MSSQL always on
+(`SQLAlwaysOn`)|`False`|[OPTIONAL] Set to true if you want SQL to be always on (high availability) for the deployment. Beware that this only applies when SQLEngineEdition is set to sqlserver-ee (Enterprise Edition) as the MSSQL database engine edition. If set to false, SQL will be deployed to one Availability Zone.|Data volume size
+(`VolumeSize`)|`500`|Volume size (GB) for the SQL data, logs, and TempDb volumes.|Data volume type
+(`VolumeType`)|`gp2`|Volume type for the SQL Data, Logs and TempDb volumes|Data volume IOPS
+(`VolumeIops`)|`1000`|Provisioned IOPS for the SQL Data, Logs and TempDb volumes. This parameter is only applicable when VolumeType is set to "io1"|Retention period
+(`BackupRetentionPeriod`)|`7`|Number of days automated backups are retained. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups.
+|===
+.Redis ElastiCache configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Redis cache node type
+(`CacheNodeType`)|`cache.m4.large`|Instance type the nodes are launched under.|Redis port
+(`RedisPort`)|`6379`|Port number to be used for Redis ElastiCache.
+|===
+.AWS Quick Start configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Quick Start S3 bucket name
+(`QSS3BucketName`)|`aws-quickstart`|S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).|Quick Start S3 bucket region
+(`QSS3BucketRegion`)|`us-east-1`|The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.|Quick Start S3 key prefix
+(`QSS3KeyPrefix`)|`quickstart-aws-sitecore-xm/`|S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
+|===
