@@ -82,9 +82,6 @@ Parameters:
   ISExtTargetGroup:
     Type: String
     Description: 'Identity Target Group'
-  InternalDNS:
-    Type: String
-    Description: 'Internal DNS FDQN'
   IdentityInstanceType:
     Type: String
     Default: m4.large

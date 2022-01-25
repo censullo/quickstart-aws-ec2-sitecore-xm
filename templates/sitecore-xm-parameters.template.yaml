@@ -303,13 +303,13 @@ Resources:
         ExcludeCharacters: '"@/\'
         ExcludePunctuation: true
         IncludeSpace: false
-  SqlMasterUser: #Sitecore SQL DB User
+  SqlMainUser: #Sitecore SQL DB User
     Type: 'AWS::SecretsManager::Secret'
     Properties:
-      Name: !Sub sitecore-quickstart-${SCQSPrefix}-sqlmaster
+      Name: !Sub sitecore-quickstart-${SCQSPrefix}-sqlmain
       Description: Secrets for the Sitecore XP1 Quick Start
       GenerateSecretString:
-        SecretStringTemplate: '{"username": "sqlmasteruser"}'
+        SecretStringTemplate: '{"username": "sqlmainuser"}'
         GenerateStringKey: 'password'
         PasswordLength: 20
         ExcludeCharacters: '"@/\'

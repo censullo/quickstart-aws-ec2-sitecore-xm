@@ -10,9 +10,6 @@ Parameters:
   VPCID:
     Type: AWS::EC2::VPC::Id
     Description: 'The VPC ID.'
-  IntDNS:
-    Type: String
-    Description: 'The internal DNS FQDN.'
   SCQSPrefix:
     Type: String
     Description: 'The Sitecore prefix for the Quick Start deployment.'

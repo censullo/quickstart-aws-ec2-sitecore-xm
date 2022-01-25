@@ -939,7 +939,6 @@ Resources:
         LoadBalancerExternal: !Ref LoadBalancerExternal
         ExternalCertificateARN: !If [CreateExternalCertificate, !GetAtt ACMStack.Outputs.ACMCertificate, !Ref ExternalCertificateARN]
         VPCID: !Ref VPCID
-        IntDNS: !If [InternalDNSName, !Sub '${AWS::Region}.sitecore.internal', !Ref 'IntDNS']
         SCQSPrefix: !GetAtt FunctionsStack.Outputs.SCQSPrefix
 
   # Sitecore SOLR Stack
@@ -1031,7 +1030,6 @@ Resources:
         CDExtTargetGroup: !GetAtt NetworkStack.Outputs.CDTargetGroup
         CMExtTargetGroup: !GetAtt NetworkStack.Outputs.CMTargetGroup
         ISExtTargetGroup: !GetAtt NetworkStack.Outputs.ISTargetGroup
-        InternalDNS: !If [InternalDNSName, !Sub '${AWS::Region}.sitecore.internal', !Ref IntDNS]
 Outputs:
   InternalALBDNS:
     Description: Internal DNS name of the ALB
