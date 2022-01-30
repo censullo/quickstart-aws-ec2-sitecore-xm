@@ -9,12 +9,12 @@ AWS Cloud.
 [#architecture1]
 .Quick Start architecture for _{partner-product-name}_ on AWS
 [link=images/architecture_diagram.png]
-image::../images/architecture_diagram.png[Architecture,width=648,height=439]
+image::../deployment_guide/images/architecture_diagram.png[Architecture,width=648,height=439]
 
 [#architecture2]
 .Quick Start architecture of resources for _{partner-product-name}_ on AWS
 [link=images/architecture_diagram_2.png]
-image::../images/architecture_diagram_2.png[Architecture,width=648,height=439]
+image::../deployment_guide/images/architecture_diagram_2.png[Architecture,width=648,height=439]
 
 As shown in figures 1 and 2, the Quick Start sets up the following:
 
