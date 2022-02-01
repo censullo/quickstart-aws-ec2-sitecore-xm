@@ -58,7 +58,7 @@ project:
     QSS3KeyPrefix: quickstart-aws-ec2-sitecore-xm/
 tests:
   master:
-    template: ./templates/sitecore-xm-master.template.yaml
+    template: ./templates/sitecore-xm-main.template.yaml
     regions: 
       - us-west-2
     parameters: 
