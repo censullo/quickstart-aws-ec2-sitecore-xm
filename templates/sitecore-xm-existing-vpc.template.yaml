@@ -226,7 +226,7 @@ Parameters:
   IntDNS:
     Type: String
     Default: ''
-    Description: "[Optional] Internal DNS name. If left blank, one is generated for you. If you have a private Route 53 hosted zone or a private managed DNS connected to your VPC, please provide the DNS suffix of the hosted zone."
+    Description: "(Optional) Internal DNS name. If left blank, one is generated for you. If you have a private Route 53 hosted zone or a private managed DNS connected to your VPC, please provide the DNS suffix of the hosted zone."
   IntVPCR53Zone:
     Type: String
     Default: ''
@@ -290,7 +290,7 @@ Parameters:
     - c5.2xlarge
     - c5.4xlarge
     - c5.9xlarge
-    ConstraintDescription: Choose an instance type; m5.xlarge or larger is recommended.
+    ConstraintDescription: Choose an instance type. m5.xlarge or larger recommended.
     Default: m5a.xlarge
     Description: Content delivery instance type.
     Type: String
@@ -344,7 +344,7 @@ Parameters:
     - c5.2xlarge
     - c5.4xlarge
     - c5.9xlarge
-    ConstraintDescription: Choose an instance type; m5.xlarge or larger is recommended.
+    ConstraintDescription: Choose an instance type. m5.xlarge or larger recommended.
     Default: m5a.xlarge
     Description: Instance type applied to the roles of content management, identity, and reference data.
     Type: String
