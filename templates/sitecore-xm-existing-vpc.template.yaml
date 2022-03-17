@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: 'Deploys Sitecore into an existing VPC  (qs-1qppe684j)'
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: "Launch into an existing VPC"
+    EntrypointName: "Parameters for launching into an existing VPC"
     OptionalParameters:
       - IntDNS
       - IntVPCR53Zone
@@ -23,7 +23,7 @@ Metadata:
           - PublicSubnet1
           - PublicSubnet2
       - Label:
-          default: Sitecore Networking Configuration
+          default: Sitecore networking Configuration
         Parameters:
           - CDDNSName
           - CMDNSName
@@ -72,7 +72,7 @@ Metadata:
           - VolumeIops
           - BackupRetentionPeriod
       - Label:
-          default: Redis ElastiCache configuration
+          default: ElastiCache for Redis configuration
         Parameters:
           - CacheNodeType
           - RedisPort
@@ -114,7 +114,7 @@ Metadata:
       ExternalCertFQDN:
         default: External certificate domain name
       ExternalR53ZoneID:
-        default: External Route 53 zone ID
+        default: External Route 53 hosted zone ID
       # Sitecore Configuration
       CDMinSize:
         default: Minimum content delivery instances
@@ -143,7 +143,7 @@ Metadata:
       SitecorePrefix:
         default: Sitecore installation prefix
       SitecoreS3Bucket:
-        default: Sitecore resources S3 Bucket
+        default: Sitecore resources S3 bucket
       SCResourcesPrefix:
         default: Sitecore installation files prefix
       SCLicensePrefix:
@@ -188,7 +188,7 @@ Metadata:
       QSS3BucketName:
         default: Quick Start S3 bucket name
       QSS3BucketRegion:
-        default: Quick Start S3 bucket region
+        default: Quick Start S3 bucket Region
       QSS3KeyPrefix:
         default: Quick Start S3 key prefix
 Parameters:
@@ -197,50 +197,47 @@ Parameters:
     Type: AWS::EC2::VPC::Id
   VPCCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28.
     Default: 10.0.0.0/16
-    Description: CIDR Block for the VPC
+    Description: CIDR block for the VPC.
     Type: String
   PrivateSubnet1A:
-    Description: ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)
+    Description: ID of the private subnet 1, located in Availability Zone 1 (e.g., subnet-a0246dcd).
     Type: AWS::EC2::Subnet::Id
   PrivateSubnet2A:
-    Description: ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)
+    Description: ID of the private subnet 2, located in Availability Zone 2 (e.g., subnet-a0246dcd).
     Type: AWS::EC2::Subnet::Id
   PublicSubnet1:
     Type: AWS::EC2::Subnet::Id
-    Description: Public subnet in Availability Zone 1
+    Description: Public subnet in Availability Zone 1.
   PublicSubnet2:
     Type: AWS::EC2::Subnet::Id
-    Description: Public subnet in Availability Zone 2
+    Description: Public subnet in Availability Zone 2.
   # Sitecore Networking Configuration
   CDDNSName:
     Type: String
-    Description: 'Fully qualified domain name for the content delivery role (e.g., home.example.com).'
+    Description: FQDN for the content delivery role (e.g., home.example.com).
   CMDNSName:
     Type: String
-    Description: Fully qualified domain name for the content management role.
+    Description: FQDN for the content management role.
   ISDNSName:
     Type: String
-    Description: Fully qualified domain name for the identity server role.
+    Description: FQDN for the identity server role.
   IntDNS:
     Type: String
     Default: ''
-    Description: "[Optional] Internal DNS name. If left blank, one is generated for you. If you have a private Route 53 hosted zone 
-      or a private managed DNS connected to your VPC, please provide the DNS suffix of the hosted zone."
+    Description: "[Optional] Internal DNS name. If left blank, one is generated for you. If you have a private Route 53 hosted zone or a private managed DNS connected to your VPC, please provide the DNS suffix of the hosted zone."
   IntVPCR53Zone:
     Type: String
     Default: ''
-    Description: "[Optional] If you already have a private Route 53 hosted zone connected to your VPC, please provide the Route 53 hosted zone ID"
+    Description: "(Optional) If you already have a private Route 53 hosted zone connected to your VPC, enter the Route 53 hosted zone ID"
   VPCPrivateDNS:
     Type: String
     AllowedValues:
       - 'True'
       - 'False'
     Default: 'False'
-    Description: "Set to true if you have your own provided DNS servers for your VPC. Should you have your own DNS servers, 
-                  you must create Canonical Name Record (CNAME) entries for the Sitecore roles. Please see the deloyment guide for details.
-                  set to false if you have a private Route 53 hosted zone connected to your VPC."
+    Description: "Choose True if you have your own provided DNS servers for your VPC. Should you have your own DNS servers, you must create Canonical Name Record (CNAME) entries for the Sitecore roles. See the deployment guide for details. Choose False if you have a private Route 53 hosted zone connected to your VPC."
   ExternalCertificateARN:
     Type: String
     Description: "[Optional] Provide the Amazon Resource Name (ARN) of the wildcard certificate created in Amazon Certificate Manager. If not provided, 
