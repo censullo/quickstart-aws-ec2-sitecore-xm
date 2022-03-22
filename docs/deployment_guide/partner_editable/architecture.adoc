@@ -30,8 +30,7 @@ internet access for resources in the private subnets.*
 ** An internet-facing Application Load Balancer (ALB) for routing traffic to the 
 instances for content delivery, content management, and identity server.
 * In the private subnets:
-** Sitecore roles deployed on a single Amazon EC2 instance that’s contained within an Auto Scaling group.
-** Each EC2 instance is deployed into its own Auto Scaling group.
+** Sitecore roles deployed on Amazon EC2 instances. Each role is deployed onto one EC2 instance, and each instance is deployed in an Auto Scaling group.
 ** Amazon Route 53 private hosted zone for internal Domain Name System (DNS) lookups within the VPC.
 ** Amazon ElastiCache for Redis.
 * An EC2 Amazon Machine Image (AMI), which is used in the initial deployment of all Sitecore roles and in subsequent Auto Scaling events.

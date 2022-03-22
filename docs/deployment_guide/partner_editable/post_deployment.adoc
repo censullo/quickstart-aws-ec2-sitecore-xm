@@ -1,6 +1,5 @@
 //Include any post-deployment steps here, such as steps necessary to test that the deployment was successful. If there are no post-deployment steps leave this file empty.
-
-== Post deployment steps
+== Postdeployment steps
 
 === Create DNS Entries
 Once the Quick Start deployment completes successfully, create DNS entries in your
@@ -91,5 +90,5 @@ While the content delivery role installs, the Sitecore configuration files updat
 private- and shared-session management. If these files are overwritten by custom content,
 they must be https://doc.sitecore.com/developers/93/platform-administration-and-architecture/en/walkthrough--configuring-a-shared-session-state-database-using-the-redis-provider.html[updated with the correct Redis details].
 
-The URL for Redis can be found in the CloudFormation outputs, or in the SSM Parameter
-Store.
+The URL for Redis can be found in the CloudFormation outputs, or in https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html[Systems Manager Parameter
+Store].
