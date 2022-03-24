@@ -10,6 +10,3 @@
 [submodule "submodules/quickstart-aws-sitecore-base"]
 	path = submodules/quickstart-aws-sitecore-base
 	url = git@github.com:aws-quickstart/quickstart-aws-sitecore-base.git
-[submodule "docs/boilerplate"]
-	path = docs/boilerplate
-	url = https://github.com/aws-quickstart/quickstart-documentation-base-common.git
