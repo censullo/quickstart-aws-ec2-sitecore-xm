@@ -60,7 +60,7 @@ tests:
   master:
     template: ./templates/sitecore-xm-main.template.yaml
     regions: 
-      - us-west-2
+      - us-east-1
     parameters: 
       KeyPairName: "$[taskcat_getkeypair]"
       SitecoreKeyPair: "$[taskcat_getkeypair]"
