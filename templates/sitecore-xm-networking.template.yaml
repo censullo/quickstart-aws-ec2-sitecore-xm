@@ -1,0 +1,118 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "This template deploys Target Groups, Listeners and Rules used for the Sitecore roles ASG's and LB's (qs-1qppe685p)"
+Parameters:
+  LoadBalancerExternal:
+    Type: String
+    Description: 'The external Applicaiton Load Balancer resource name.'
+  ExternalCertificateARN:
+    Type: String
+    Description: 'The ACM ARN for the external Sitecore certificate.'
+  VPCID:
+    Type: AWS::EC2::VPC::Id
+    Description: 'The VPC ID.'
+  SCQSPrefix:
+    Type: String
+    Description: 'The Sitecore prefix for the Quick Start deployment.'
+
+Resources:
+  # --- External ALB Config --- #
+  # HTTPS Listner
+  HTTPSListenerExternal:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      Certificates:
+        - CertificateArn: !Ref ExternalCertificateARN
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CDExtTargetGroup
+      LoadBalancerArn: !Ref LoadBalancerExternal
+      Port: 443
+      Protocol: HTTPS
+  HTTPListenerExternal:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+       - Type: "redirect"
+         RedirectConfig:
+           Protocol: "HTTPS"
+           Port: "443"
+           Host: "#{host}"
+           Path: "/#{path}"
+           Query: "#{query}"
+           StatusCode: "HTTP_301"
+      LoadBalancerArn: !Ref LoadBalancerExternal
+      Port: 80
+      Protocol: HTTP
+  # HTTPS External Rules
+  HTTPSListenerExternalRule1:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref CMExtTargetGroup
+      Conditions:
+        - Field: host-header
+          Values:
+            - !Sub '{{resolve:ssm:/${SCQSPrefix}/service/cmdns:1}}'
+      ListenerArn: !Ref HTTPSListenerExternal
+      Priority: 1
+  HTTPSListenerExternalRule2:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ISExtTargetGroup
+      Conditions:
+        - Field: host-header
+          Values:
+            - !Sub '{{resolve:ssm:/${SCQSPrefix}/service/isdns:1}}'
+      ListenerArn: !Ref HTTPSListenerExternal
+      Priority: 2
+  #External Target Groups
+  CDExtTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckPort: '80'
+      HealthCheckProtocol: HTTP
+      Port: 443
+      Protocol: HTTPS
+      TargetType: instance
+      VpcId: !Ref VPCID
+      Tags:
+        - Key: !Ref SCQSPrefix
+          Value: "Content Delivery Role"
+  CMExtTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckPort: '80'
+      HealthCheckProtocol: HTTP
+      Port: 443
+      Protocol: HTTPS
+      TargetType: instance
+      VpcId: !Ref VPCID
+      Tags:
+        - Key: !Ref SCQSPrefix
+          Value: "Content Management Role"
+  ISExtTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckPort: '80'
+      HealthCheckProtocol: HTTP
+      Port: 443
+      Protocol: HTTPS
+      TargetType: instance
+      VpcId: !Ref VPCID
+      Tags:
+        - Key: !Ref SCQSPrefix
+          Value: "Identity Server Role"
+
+Outputs:
+  CDTargetGroup:
+    Description: The ID of the Content Delivery Target Group
+    Value: !Ref CDExtTargetGroup
+  CMTargetGroup:
+    Description: The ID of the Content Management Target Group
+    Value: !Ref CMExtTargetGroup
+  ISTargetGroup:
+    Description: The ID of the Content Delivery Target Group
+    Value: !Ref ISExtTargetGroup
