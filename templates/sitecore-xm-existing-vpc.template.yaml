@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: 'Deploys Sitecore into an existing VPC  (qs-1qppe684j)'
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: "Launch into an existing VPC"
+    EntrypointName: "Parameters for launching into an existing VPC"
     OptionalParameters:
       - IntDNS
       - IntVPCR53Zone
@@ -23,7 +23,7 @@ Metadata:
           - PublicSubnet1
           - PublicSubnet2
       - Label:
-          default: Sitecore Networking Configuration
+          default: Sitecore networking Configuration
         Parameters:
           - CDDNSName
           - CMDNSName
@@ -72,7 +72,7 @@ Metadata:
           - VolumeIops
           - BackupRetentionPeriod
       - Label:
-          default: Redis ElastiCache configuration
+          default: ElastiCache for Redis configuration
         Parameters:
           - CacheNodeType
           - RedisPort
@@ -114,7 +114,7 @@ Metadata:
       ExternalCertFQDN:
         default: External certificate domain name
       ExternalR53ZoneID:
-        default: External Route 53 zone ID
+        default: External Route 53 hosted zone ID
       # Sitecore Configuration
       CDMinSize:
         default: Minimum content delivery instances
@@ -143,7 +143,7 @@ Metadata:
       SitecorePrefix:
         default: Sitecore installation prefix
       SitecoreS3Bucket:
-        default: Sitecore resources S3 Bucket
+        default: Sitecore resources S3 bucket
       SCResourcesPrefix:
         default: Sitecore installation files prefix
       SCLicensePrefix:
@@ -188,7 +188,7 @@ Metadata:
       QSS3BucketName:
         default: Quick Start S3 bucket name
       QSS3BucketRegion:
-        default: Quick Start S3 bucket region
+        default: Quick Start S3 bucket Region
       QSS3KeyPrefix:
         default: Quick Start S3 key prefix
 Parameters:
@@ -197,63 +197,56 @@ Parameters:
     Type: AWS::EC2::VPC::Id
   VPCCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28.
     Default: 10.0.0.0/16
-    Description: CIDR Block for the VPC
+    Description: CIDR block for the VPC.
     Type: String
   PrivateSubnet1A:
-    Description: ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)
+    Description: ID of the private subnet 1, located in Availability Zone 1 (e.g., subnet-a0246dcd).
     Type: AWS::EC2::Subnet::Id
   PrivateSubnet2A:
-    Description: ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)
+    Description: ID of the private subnet 2, located in Availability Zone 2 (e.g., subnet-a0246dcd).
     Type: AWS::EC2::Subnet::Id
   PublicSubnet1:
     Type: AWS::EC2::Subnet::Id
-    Description: Public subnet in Availability Zone 1
+    Description: Public subnet in Availability Zone 1.
   PublicSubnet2:
     Type: AWS::EC2::Subnet::Id
-    Description: Public subnet in Availability Zone 2
+    Description: Public subnet in Availability Zone 2.
   # Sitecore Networking Configuration
   CDDNSName:
     Type: String
-    Description: 'Fully qualified domain name for the content delivery role (e.g., home.example.com).'
+    Description: FQDN for the content delivery role (e.g., home.example.com).
   CMDNSName:
     Type: String
-    Description: Fully qualified domain name for the content management role.
+    Description: FQDN for the content management role.
   ISDNSName:
     Type: String
-    Description: Fully qualified domain name for the identity server role.
+    Description: FQDN for the identity server role.
   IntDNS:
     Type: String
     Default: ''
-    Description: "[Optional] Internal DNS name. If left blank, one is generated for you. If you have a private Route 53 hosted zone 
-      or a private managed DNS connected to your VPC, please provide the DNS suffix of the hosted zone."
+    Description: "[Optional] Internal DNS name. If left blank, one is generated for you. If you have a private Route 53 hosted zone or a private managed DNS connected to your VPC, please provide the DNS suffix of the hosted zone."
   IntVPCR53Zone:
     Type: String
     Default: ''
-    Description: "[Optional] If you already have a private Route 53 hosted zone connected to your VPC, please provide the Route 53 hosted zone ID"
+    Description: "(Optional) If you already have a private Route 53 hosted zone connected to your VPC, enter the Route 53 hosted zone ID"
   VPCPrivateDNS:
     Type: String
     AllowedValues:
       - 'True'
       - 'False'
     Default: 'False'
-    Description: "Set to true if you have your own provided DNS servers for your VPC. Should you have your own DNS servers, 
-                  you must create Canonical Name Record (CNAME) entries for the Sitecore roles. Please see the deloyment guide for details.
-                  set to false if you have a private Route 53 hosted zone connected to your VPC."
+    Description: "Choose True if you have your own provided DNS servers for your VPC. Should you have your own DNS servers, you must create Canonical Name Record (CNAME) entries for the Sitecore roles. See the deployment guide for details. Choose False if you have a private Route 53 hosted zone connected to your VPC."
   ExternalCertificateARN:
     Type: String
-    Description: "[Optional] Provide the Amazon Resource Name (ARN) of the wildcard certificate created in Amazon Certificate Manager. If not provided, 
-      a wildcard certificate will be created for you. If you provide an ARN, you do not need to provide details 
-      for ExternalCertFQDN or ExternalRoute53ZoneID."
+    Description: "(Optional) Provide the Amazon Resource Name (ARN) of the wildcard certificate created in Amazon Certificate Manager. If not provided, a wildcard certificate will be created for you. If you provide an ARN, you do not need to provide details for ExternalCertFQDN or ExternalRoute53ZoneID."
   ExternalCertFQDN: 
     Type: String
-    Description: "[Optional] External domain name for the Sitecore deployment (e.g., example.com). 
-      This is created in ACM as a wildcard certificate (e.g., *.example.com) if no value is provided for ExternalCertificateARN."
+    Description: "(Optional) External domain name for the Sitecore deployment (e.g., example.com). This is created in ACM as a wildcard certificate (e.g., *.example.com) if no value is provided for ExternalCertificateARN."
   ExternalR53ZoneID: 
     Type: String
-    Description: "[Optional] Provide the Route 53–hosted zone ID for ExternalCertFQDN if you require certificate validation to be done via DNS. 
-      If no Route 53 hosted zone ID is provided, validation is done via email."
+    Description: "(Optional) Provide the Route 53 hosted zone ID for ExternalCertFQDN if you require certificate validation to be done via DNS. If no Route 53 hosted zone ID is provided, validation is done via email."
   #Sitecore Configuration
   CDMinSize:
     Type: String
@@ -297,7 +290,7 @@ Parameters:
     - c5.2xlarge
     - c5.4xlarge
     - c5.9xlarge
-    ConstraintDescription: Choose an instance type. m3.medium or larger recommended.
+    ConstraintDescription: Choose an instance type; m5.xlarge or larger is recommended.
     Default: m5a.xlarge
     Description: Content delivery instance type.
     Type: String
@@ -310,7 +303,7 @@ Parameters:
       - ALBRequestCountPerTarget
     Type: String
   CDScalingMetricValue:
-    Description: Value required for the scaling metric (For ASGAverageNetworkIn this value is in bytes).
+    Description: Value required for the scaling metric. For ASGAverageNetworkIn, this value is in bytes.
     Default: 70
     Type: Number
   CMMinSize:
@@ -351,9 +344,9 @@ Parameters:
     - c5.2xlarge
     - c5.4xlarge
     - c5.9xlarge
-    ConstraintDescription: Choose an instance type. m3.medium or larger recommended.
+    ConstraintDescription: Choose an instance type; m5.xlarge or larger is recommended.
     Default: m5a.xlarge
-    Description: Instance type, applied to the roles of content management, identity, and reference data.
+    Description: Instance type applied to the roles of content management, identity, and reference data.
     Type: String
   CMScalingMetric:
     Description: Metric used to determine scaling of the content management role.
@@ -364,7 +357,7 @@ Parameters:
       - ALBRequestCountPerTarget
     Type: String
   CMScalingMetricValue:
-    Description: Value required for the scaling metric (For ASGAverageNetworkIn this value is in bytes).
+    Description: Value required for the scaling metric. For ASGAverageNetworkIn, this value is in bytes.
     Default: 70
     Type: Number
   SitecoreKeyPair:
@@ -372,31 +365,28 @@ Parameters:
     Description: EC2 Key Pair to use for the Sitecore instances.
   SitecorePrefix:
     Type: String
-    Description: Prefix to be used for the Sitecore installation. This is limited to 8 characters.
+    Description: Prefix to be used for the Sitecore installation. This is limited to eight characters.
     MinLength: 1
     MaxLength: 8
     AllowedPattern: ^[a-zA-Z0-9]*
   SitecoreS3Bucket:
     Type: String
-    Description: S3 Bucket name where the Sitecore 9.3 resources are located (installation files, license file, etc.).
-      This deployment will put objects into this bucket.
+    Description: S3 bucket name where Sitecore 9.3 resources, such as installation and license files, are located. This deployment will put objects into this bucket.
   SCResourcesPrefix:
     Type: String
-    Description: "Prefix in the S3 Bucket for the Sitecore install files (eg: resources/)."
+    Description: "Prefix in the S3 bucket for the Sitecore installation files (e.g., resources/)."
     Default: resources/
   SCLicensePrefix:
     Type: String
-    Description: "Prefix in the S3 Bucket for the license.zip file (eg: license/)." 
+    Description: "Prefix in the S3 bucket for the license.zip file (e.g., license/)." 
     Default: license/
   SOLRUrl:
     Type: String
-    Description: "[Optional] URL of your Solr server/cluster. If no URL is provided a development Solr instance will be 
-      created for this Sitecore deployment. Note: This development Solr instance should not be used within a production environment."
+    Description: "(Optional) URL of your Solr server/cluster. If no URL is provided, a development Solr instance will be created. The development Solr instance should not be used within a production environment."
     Default: ''
   SOLRCorePrefix:
     Type: String
-    Description: If you provided a Solr URL, this is the prefix of your pre-configured Solr cores. 
-      If no Solr URL provided, this is the prefix used for the Solr cores on the development Solr instance.
+    Description: If you provided a Solr URL, enter the prefix of your preconfigured Solr cores. If no Solr URL provided, this is the prefix used for the Solr cores on the development Solr instance.
   EnvironmentType:
     Description: Type of Sitecore deployment.
     AllowedValues:
@@ -405,7 +395,7 @@ Parameters:
     Default: Production
     Type: String
   SCLogLevel:
-    Description: Sitecore deployment configured log level.
+    Description: Log level configured for the Sitecore deployment.
     AllowedValues:
       - Information
       - Debug
@@ -415,10 +405,10 @@ Parameters:
     Default: Information
     Type: String
   EmailNotifications:
-    Description: Email address for receiving Sitecore auto scaling notifications.
+    Description: Email address for receiving Sitecore scaling notifications.
     Type: String
   LambdaZipsBucketName:
-    Description: '[Optional] Name of the S3 bucket where the Lambda zip files should be placed. If you leave this parameter blank, an S3 bucket will be created.'
+    Description: (Optional) The name of the S3 bucket where the Lambda zip files should be placed. If you leave this parameter blank, an S3 bucket will be created.
     Type: String
     Default: ''
   # RDS MS SQL
@@ -427,8 +417,7 @@ Parameters:
       - 'true'
       - 'false'
     Default: 'false'
-    Description: If set to true, minor engine upgrades are applied to the database instance. 
-      If set to false, minor engine upgrades are not applied to the database instance.
+    Description: If set to true, minor engine upgrades are applied to the database instance. If set to false, minor engine upgrades are not applied to the database instance.
     Type: String
   DBInstanceClass:
     AllowedValues:
@@ -482,20 +471,16 @@ Parameters:
     AllowedValues:
       - 'False'
       - 'True'
-    Description: "[OPTIONAL] Set to true if you want SQL to be always on (high availability) for the deployment. 
-      Beware that this only applies when SQLEngineEdition is set to sqlserver-ee (Enterprise Edition) as the MSSQL database engine edition. 
-      If set to false, SQL will be deployed to one Availability Zone."
+    Description: "(Optional) Set to true if you want SQL to be always on for the deployment (high availability). Beware that this only applies when the MSSQL database engine edition (SQLEngineEdition) is set to sqlserver-ee (Enterprise Edition). If set to false, SQL will be deployed to one Availability Zone."
     Type: String
   BackupRetentionPeriod:
     Default: 7
-    Description: Number of days automated backups are retained. Setting this parameter to a positive number enables backups. 
-      Setting this parameter to 0 disables automated backups. 
+    Description: Number of days automated backups are retained. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups. 
     Type: Number
   VolumeIops:
     Default: 1000
-    Description:
-      Provisioned IOPS for the SQL Data, Logs and TempDb volumes. This
-      parameter is only applicable when VolumeType is set to "io1"
+    Description: Provisioned IOPS for the SQL Data, Logs and TempDb volumes. This
+      parameter is only applicable when VolumeType is set to io1.
     MaxValue: '20000'
     MinValue: '100'
     Type: Number
@@ -531,36 +516,48 @@ Parameters:
       - cache.r4.4xlarge
       - cache.r4.8xlarge
   RedisPort:
-    Description: Port number to be used for Redis ElastiCache.
+    Description: Port number to be used for ElastiCache for Redis.
     Type: Number
     Default: 6379
   # Quick Start Confguration
   QSS3BucketName:
-    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
     ConstraintDescription:
-      Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
-      (-).
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
+      hyphen (-).
     Default: aws-quickstart
     Description:
-      S3 bucket name for the Quick Start assets. Quick Start bucket name
-      can include numbers, lowercase letters, uppercase letters, and hyphens (-).
-      It cannot start or end with a hyphen (-).
+      Name of the S3 bucket for your copy of the Quick Start assets. 
+      Keep the default name unless you are customizing the template. 
+      Changing the name updates code references to point to a new Quick 
+      Start location. This name can include numbers, lowercase letters, 
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+      See https://aws-quickstart.github.io/option1.html.
     Type: String
   QSS3BucketRegion:
     Default: 'us-east-1'
-    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is 
+    hosted. Keep the default Region unless you are customizing the template. 
+    Changing this Region updates code references to point to a new Quick Start location. 
+    When using your own bucket, specify the Region. 
+    See https://aws-quickstart.github.io/option1.html.'
     Type: String
   QSS3KeyPrefix:
-    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    AllowedPattern: '^[0-9a-zA-Z-/]*$'
     ConstraintDescription:
-      Quick Start key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slash (/).
-    Default: quickstart-aws-sitecore-xm/
+      The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/). The prefix should
+      end with a forward slash (/).
+    Default: quickstart-sitecore-xp/
     Description:
-      S3 key prefix for the Quick Start assets. Quick Start key prefix
-      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
-      forward slash (/).
+      S3 key prefix that is used to simulate a folder for your copy of the 
+      Quick Start assets. Keep the default prefix unless you are customizing 
+      the template. Changing this prefix updates code references to point to 
+      a new Quick Start location. This prefix can include numbers, lowercase 
+      letters, uppercase letters, hyphens (-), and forward slashes (/). End with 
+      a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+      and https://aws-quickstart.github.io/option1.html.
     Type: String
 Rules:
   CDInstanceNumbers:
@@ -1067,3 +1064,6 @@ Outputs:
   InternalDNSFQDN:
     Description: The internal VPC FQDN for the Sitecore deployment 
     Value: !If [CreateInternalR53, !GetAtt R53Stack.Outputs.InternalDNSFQDN, !Ref IntDNS]
+  Postdeployment:
+    Description: See the deployment guide for postdeployment steps.
+    Value: https://fwd.aws/n9N4D?

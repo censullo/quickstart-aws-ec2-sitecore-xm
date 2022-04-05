@@ -1,6 +1,0 @@
-
-=== Launch into a new VPC
-include::sitecore-xm-master.template.adoc[]
-
-=== Launch into an existing VPC
-include::sitecore-xm-existing-vpc.template.adoc[]
