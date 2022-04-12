@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Creates a new VPC and RD GW host, and deploys Sitecore into the newly created VPC (qs-1qppe6855)
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: "Parameters for launching into a new VPC"
+    EntrypointName: Deploy into a new VPC
     OptionalParameters:
       - IntDNS
       - ExternalCertificateARN
@@ -23,7 +23,7 @@ Metadata:
           - PublicSubnet2CIDR
           - AvailabilityZones
       - Label:
-          default: RDGW configuration
+          default: RD Gateway configuration
         Parameters:
           - AdminUser
           - AdminPassword
@@ -121,7 +121,7 @@ Metadata:
       RDGWCIDR:
         default: Allowed RD Gateway external access CIDR
       KeyPairName:
-        default: Key pair name for the RD Gateway
+        default: RD Gateway key pair name
     # Sitecore Network Configuration
       CDDNSName:
         default: Content delivery FQDN
@@ -167,7 +167,7 @@ Metadata:
       # MarCrRepInstanceType:
       #   default: Marketing automation reporting, cortex reporting, reporting
       SitecoreKeyPair:
-        default: EC2 Key Pair for Sitecore instances
+        default: EC2 key pair for Sitecore instances
       SitecorePrefix:
         default: Sitecore installation prefix
       SitecoreS3Bucket:
@@ -209,9 +209,9 @@ Metadata:
         default: Retention period
     # Redis Configuration
       CacheNodeType:
-        default: Redis cache node type
+        default: Elasticache for Redis cache node type
       RedisPort:
-        default: Redis port
+        default: Elasticache for Redis port
     #Quick Start Configuration
       QSS3BucketName:
         default: Quick Start S3 bucket name
@@ -253,7 +253,7 @@ Parameters:
     Default: 10.0.144.0/20
     Type: String
   AvailabilityZones:
-    Description: "List of Availability Zones to use for the subnets in the VPC."
+    Description: List of Availability Zones to use for the subnets in the VPC.
     Type: List<AWS::EC2::AvailabilityZone::Name>
 #RDGW
   AdminUser:
@@ -264,14 +264,14 @@ Parameters:
     MaxLength: '25'
     AllowedPattern: "[a-zA-Z0-9]*"
   AdminPassword:
-    Description: Password for the administrative account. Must be at least 8 characters containing letters, numbers, and symbols.
+    Description: Password for the administrator account. Must be at least 8 characters containing letters, numbers, and symbols.
     Type: String
     MinLength: '8'
     MaxLength: '32'
     AllowedPattern: "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*"
     NoEcho: true
   DomainDNSName:
-    Description: Fully qualified domain name (FQDN)—for example, example.com.
+    Description: Fully qualified domain name (FQDN), e.g., example.com.
     Type: String
     Default: example.com
     MinLength: '2'
@@ -283,7 +283,7 @@ Parameters:
       - '1'
       - '2'
     Default: '1'
-    Description: Enter the number of RD Gateway hosts to create.
+    Description: Number of RD Gateway hosts to create.
     Type: String
   RDGWInstanceType:
     Description: Amazon EC2 instance type for the first RD Gateway instance.
@@ -312,7 +312,7 @@ Parameters:
 # Sitecore Networking Configuration
   CDDNSName:
     Type: String
-    Description: 'Fully qualified domain name (FQDN) for the content delivery role (e.g., home.example.com).'
+    Description: FQDN for the content delivery role (e.g., home.example.com).
   CMDNSName:
     Type: String
     Description: FQDN for the content management role.
@@ -321,16 +321,16 @@ Parameters:
     Description: FQDN for the identity server role.
   IntDNS:
     Type: String
-    Description: '(Optional) Internal DNS name. If left blank, one is generated for you.'
+    Description: (Optional) Internal DNS name. If left blank, one is generated for you.
   ExternalCertificateARN:
     Type: String
-    Description: "(Optional) Provide the Amazon Resource Name (ARN) of the wildcard certificate created in ACM. If not provided, a wildcard certificate will be created for you. If you provide an ARN, you do not need to provide details for ExternalCertFQDN or ExternalRoute53ZoneID."
+    Description: (Optional) The Amazon Resource Name (ARN) of the wildcard certificate created in ACM. If not provided, a wildcard certificate will be created for you. If you provide an ARN, you do not need to enter ExternalCertFQDN or ExternalRoute53ZoneID parameters.
   ExternalCertFQDN: 
     Type: String
-    Description: "(Optional) External domain name for the Sitecore deployment (e.g., example.com). This is created in ACM as a wildcard certificate (e.g., *.example.com) if no value is provided for ExternalCertificateARN."
+    Description: (Optional) External domain name for the Sitecore deployment (e.g., example.com). This is created in ACM as a wildcard certificate (e.g., *.example.com) if no value is provided for ExternalCertificateARN.
   ExternalR53ZoneID: 
     Type: String
-    Description: "(Optional) Provide the Route 53 hosted zone ID for ExternalCertFQDN if you require certificate validation to be done via DNS. If no Route 53 hosted zone ID is provided, validation is done via email."
+    Description: (Optional) Enter a Route 53 Hosted Zone ID for ExternalCertFQDN if you require CNS certificate validation. If no Route 53 hosted zone ID is provided, validation is done using email.
 # Sitecore Configuration
   CDMinSize:
     Type: String
@@ -461,15 +461,15 @@ Parameters:
     Description: S3 bucket name where Sitecore 9.3 resources, such as installation and license files, are located. This deployment will put objects into this bucket.
   SCResourcesPrefix:
     Type: String
-    Description: "Prefix in the S3 bucket for the Sitecore installation files (e.g., resources/)."
+    Description: Prefix in the S3 bucket for the Sitecore installation files (e.g., resources/).
     Default: resources/
   SCLicensePrefix:
     Type: String
-    Description: "Prefix in the S3 bucket for the license.zip file (e.g., license/)." 
+    Description: Prefix in the S3 bucket for the license.zip file (e.g., license/). 
     Default: license/
   SOLRUrl:
     Type: String
-    Description: "(Optional) URL of your Solr server/cluster. If no URL is provided, a development Solr instance will be created. The development Solr instance should not be used in a production environment."
+    Description: (Optional) URL of your Solr server/cluster. If no URL is provided, a development Solr instance will be created. The development Solr instance should not be used in a production environment.
     Default: ''
   SOLRCorePrefix:
     Type: String
@@ -495,7 +495,7 @@ Parameters:
     Description: Email address for receiving Sitecore scaling notifications.
     Type: String
   LambdaZipsBucketName:
-    Description: (Optional) The name of the S3 bucket for Lambda function zip files. If you leave this parameter blank, an S3 bucket will be created.
+    Description: (Optional) The name of the S3 bucket for Lambda function zip files. If you leave this parameter blank, an S3 bucket is created.
     Type: String
     Default: ''
 # RDS MS SQL
@@ -558,7 +558,7 @@ Parameters:
     AllowedValues:
       - 'False'
       - 'True'
-    Description: "(Optional) Set to true to enable SQL Server Always On availability groups. This only applies when the MSSQL database engine edition (SQLEngineEdition) is set to sqlserver-ee (Enterprise Edition). If set to false, SQL will be deployed to one Availability Zone."
+    Description: (Optional) Set to true to enable SQL Server Always On availability groups. This only applies when the MSSQL database engine edition (SQLEngineEdition) is set to sqlserver-ee (Enterprise Edition). If set to false, SQL will be deployed to one Availability Zone.
     Type: String
   BackupRetentionPeriod:
     Default: 7
