@@ -3,7 +3,7 @@
 :partner-product-name: Sitecore XM
 :partner-product-short-name: Sitecore
 //:partner-company-name: The I&A Team
-:doc-month: March
+:doc-month: April
 :doc-year: 2022
 //:partner-contributors: John Smith, {partner-company-name}
 //:other-contributors: Akua Mansa, Trek10
