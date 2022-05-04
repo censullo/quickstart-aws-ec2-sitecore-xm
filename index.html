@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.16">
+<meta name="generator" content="Asciidoctor 2.0.17">
 <meta name="description" content="Sitecore XM Deployment Guide on AWS">
 <meta name="keywords" content="Quick Start, AWS, Sitecore XM">
 <title>Sitecore XM on the AWS Cloud</title>
@@ -750,6 +750,7 @@ p {
 
 /* image layout */
 #toc.toc2 #toctitle {
+  /* Do not change! This link is intended to be broken for non-production builds. */
   background-image: url("images/AWS-Logo.svg");
   background-repeat: no-repeat;
   background-size: 50%;
@@ -838,11 +839,11 @@ p.footer-text a{color:#d7d8d8}
 <li><a href="#_costs_and_licenses">Costs and licenses</a></li>
 <li><a href="#_architecture">Architecture</a></li>
 <li><a href="#_deployment_options">Deployment options</a></li>
-<li><a href="#_pre_deployment_steps">Pre deployment steps</a></li>
+<li><a href="#_predeployment_steps">Predeployment steps</a></li>
 <li><a href="#_deployment_steps">Deployment steps</a></li>
-<li><a href="#_post_deployment_steps">Post deployment steps</a>
+<li><a href="#_postdeployment_steps">Postdeployment steps</a>
 <ul class="sectlevel2">
-<li><a href="#_create_dns_entries">Create DNS Entries</a></li>
+<li><a href="#_create_dns_entries">Create DNS entries</a></li>
 <li><a href="#_test_the_deployment">Test the deployment</a></li>
 <li><a href="#_best_practices_for_using_sitecore_xm_on_aws">Best practices for using Sitecore XM on AWS</a></li>
 <li><a href="#_other_useful_information">Other useful information</a></li>
@@ -858,7 +859,7 @@ p.footer-text a{color:#d7d8d8}
 <div id="preamble">
 <div class="sectionbody">
 <h2 id="_sitecore_xm_on_the_aws_cloud" class="discrete text-center">Sitecore XM on the AWS Cloud</h2>
-<h2 id="_quick_start_reference_deployment" class="discrete text-left text-center">Quick Start Reference Deployment</h2>
+<h2 id="_quick_start_deployment_guide" class="discrete text-left text-center">Quick Start Deployment Guide</h2>
 <div class="imageblock text-center">
 <div class="content">
 <img src="https://aws-quickstart.s3.amazonaws.com/docs/deployment-guide/aws-quickstart-deployment-graphic.png" alt="QS" width="80" height="80">
@@ -870,8 +871,8 @@ p.footer-text a{color:#d7d8d8}
 </div>
 </div>
 <div class="paragraph text-center">
-<p><strong>January 2022</strong><br>
-<em>Tony Bulding, Sasidhar Reddy Bhumireddy, Borja Prado, AWS Quick Start team</em><br></p>
+<p><strong>April 2022</strong><br>
+<em>Tony Bulding, Sasidhar Reddy Bhumireddy, and Borja Prado, AWS Integration &amp; Automation team</em><br></p>
 </div>
 <div class="admonitionblock tip text-left">
 <table>
@@ -880,14 +881,13 @@ p.footer-text a{color:#d7d8d8}
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Visit our <a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm" target="_blank" rel="noopener">GitHub repository</a> to view source files. To post feedback,
-report bugs, or submit feature ideas for this Quick Start, see the <a href="#_feedback">feedback</a> section of the guide.
+Refer to the <a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm" target="_blank" rel="noopener">GitHub repository</a> to view source files, report bugs, submit feature ideas, and post feedback about this Quick Start. To comment on the documentation, refer to <a href="#_feedback">Feedback</a>.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph text-left">
-<p>This Quick Start was created by Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that use AWS CloudFormation templates to deploy key technologies on AWS, following AWS best practices.</p>
+<p>This Quick Start was created by Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that help people deploy popular technologies on AWS according to AWS best practices.</p>
 </div>
 </div>
 </div>
@@ -895,21 +895,7 @@ report bugs, or submit feature ideas for this Quick Start, see the <a href="#_fe
 <h2 id="_overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Quick Start deploys Sitecore XM on the AWS Cloud. If you are unfamiliar with AWS Quick Starts we recommend that you read the <a href="https://aws-ia.github.io/content/qs_info.html">AWS Quick Start General Content Guide</a>.</p>
-</div>
-<div class="paragraph">
-<p>The Sitecore Experience Manager (XM) is a content management system (CMS) for web
-content that automates marketing to deliver a personalized user experience. This Quick
-Start is intended for organizations that want to deploy a multirole Sitecore XM
-architecture on the AWS Cloud.
-This Quick Start provides step-by-step instructions to deploy 3 roles that compose the
-complete Sitecore XM platform. All of the roles are deployed into individual Auto Scaling
-groups to ensure recoverability when an instance fails. Database services are provided by
-SQL Server through Amazon Relational Database Service (Amazon RDS), and caching is
-managed by Redis on Amazon ElastiCache.
-To control access, this deployment uses AWS Certificate Manager (ACM) and AWS Secrets
-Manager. Other services used by this Quick Start include Amazon Simple Storage Service
-(Amazon S3), AWS Systems Manager, Amazon CloudWatch, AWS Lambda, and Amazon Route 53.</p>
+<p>This Quick Start deploys Sitecore XM on the AWS Cloud. If you are unfamiliar with AWS Quick Starts we recommend that you read the <a href="https://fwd.aws/rA69w?">AWS Quick Start General Information Guide</a>.</p>
 </div>
 </div>
 </div>
@@ -919,15 +905,15 @@ Manager. Other services used by this Quick Start include Amazon Simple Storage S
 <div class="paragraph">
 <p>This Quick Start requires a Sitecore XM license. To use the Quick Start in your
 production environment, <a href="https://www.sitecore.com/knowledge-center/getting-started/developer-trial">sign up for a developer trial license</a>. For a full license, contact a
-Sitecore sales representative or Sitecore partner. Before you launch the Quick Start, place
-the license key in the deployment’s associated S3 bucket, and specify its location. For more
-information, see the <a href="#_pre_deployment_steps">Pre deployment steps</a> section.</p>
+Sitecore sales representative or Sitecore partner. Before you launch the Quick Start, save
+the license key to the deployment’s S3 bucket, and specify its location. For more
+information, refer to <a href="#_pre_deployment_steps">Predeployment steps</a>.</p>
 </div>
 <div class="paragraph">
 <p>If you don’t have a license, the Quick Start deployment will not complete successfully.</p>
 </div>
 <div class="paragraph">
-<p>There is no cost to use this Quick Start, however you will be billed for the resources deployed. For more information see the <a href="http://general-content-file">AWS Quick Start General Content Guide</a>.</p>
+<p>There is no cost to use this Quick Start; however, you are billed for resources you deploy. For more information see the <a href="http://general-content-file">AWS Quick Start General Content Guide</a>.</p>
 </div>
 </div>
 </div>
@@ -941,15 +927,15 @@ AWS Cloud.</p>
 </div>
 <div id="architecture1" class="imageblock">
 <div class="content">
-<a class="image" href="images/architecture_diagram.png"><img src="deployment_guide/images/architecture_diagram.png" alt="Architecture" width="648" height="439"></a>
+<a class="image" href="deployment_guide/images/architecture_diagram.png"><img src="deployment_guide/images/architecture_diagram.png" alt="Architecture" width="1227" height="851"></a>
 </div>
-<div class="title">Figure 1. Quick Start architecture for <em>Sitecore XM</em> on AWS</div>
+<div class="title">Figure 1. Quick Start architecture for Sitecore XM on AWS</div>
 </div>
 <div id="architecture2" class="imageblock">
 <div class="content">
-<a class="image" href="images/architecture_diagram_2.png"><img src="deployment_guide/images/architecture_diagram_2.png" alt="Architecture" width="648" height="439"></a>
+<a class="image" href="deployment_guide/images/architecture_diagram_2.png"><img src="deployment_guide/images/architecture_diagram_2.png" alt="Architecture" width="967" height="1201"></a>
 </div>
-<div class="title">Figure 2. Quick Start architecture of resources for <em>Sitecore XM</em> on AWS</div>
+<div class="title">Figure 2. Quick Start architecture of resources for Sitecore XM on AWS</div>
 </div>
 <div class="paragraph">
 <p>As shown in figures 1 and 2, the Quick Start sets up the following:</p>
@@ -960,25 +946,20 @@ AWS Cloud.</p>
 <p>A highly available architecture that spans two Availability Zones.*</p>
 </li>
 <li>
-<p>A virtual private cloud (VPC) configured with public and private subnets, according to
-AWS best practices, to provide you with your own virtual network on AWS.*</p>
+<p>A virtual private cloud (VPC) configured with public and private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.*</p>
 </li>
 <li>
-<p>A Microsoft remote desktop gateway (RDGW) in an Auto Scaling group to allow
-inbound remote desktop access to Amazon Elastic Compute Cloud (Amazon EC2)
-instances in the public and private subnets.*</p>
+<p>An external Application Load Balancer (ALB) for routing traffic to Sitecore instances in the private subnet.</p>
 </li>
 <li>
 <p>In the public subnets:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Managed network address translation (NAT) gateways to allow outbound
-internet access for resources in the private subnets.*</p>
+<p>Managed network address translation (NAT) gateways to allow outbound internet access for resources in the private subnets.*</p>
 </li>
 <li>
-<p>An internet-facing Application Load Balancer (ALB) for routing traffic to the
-instances for content delivery, content management, and identity server.</p>
+<p>Microsoft Remote Desktop Gateway (RD Gateway) instances in an Auto Scaling group. This provides inbound remote desktop access to Amazon Elastic Compute Cloud (Amazon EC2) instances in the public and private subnets.*</p>
 </li>
 </ul>
 </div>
@@ -988,22 +969,19 @@ instances for content delivery, content management, and identity server.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Sitecore roles deployed on a single Amazon EC2 instance that’s contained within an Auto Scaling group.</p>
+<p>Sitecore roles deployed on Amazon EC2 instances. Each role is deployed to one EC2 instance, and each instance is deployed to an Auto Scaling group.</p>
 </li>
 <li>
-<p>Each EC2 instance is deployed into its own Auto Scaling group.</p>
+<p>Amazon RDS SQL Server instances.</p>
 </li>
 <li>
-<p>Amazon Route 53 private hosted zone for internal Domain Name System (DNS) lookups within the VPC.</p>
-</li>
-<li>
-<p>Amazon ElastiCache for Redis.</p>
+<p>Amazon ElastiCache for Redis for cache management.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>An EC2 Amazon Machine Image (AMI), which is used in the initial deployment of all Sitecore roles and in subsequent Auto Scaling events.</p>
+<p>An EC2 Amazon Machine Image (AMI) for the initial deployment of Sitecore roles and subsequent Auto Scaling events.</p>
 </li>
 <li>
 <p>AWS Systems Manager to store parameter data and the AMI automation build document.</p>
@@ -1012,19 +990,16 @@ instances for content delivery, content management, and identity server.</p>
 <p>Amazon Simple Storage Service (Amazon S3) artifacts bucket for storing static data.</p>
 </li>
 <li>
-<p>Amazon RDS SQL Server to provide database services.</p>
-</li>
-<li>
 <p>Amazon CloudWatch for monitoring deployed services.</p>
 </li>
 <li>
-<p>AWS Secrets Manager for access control.</p>
+<p>AWS Secrets Manager and AWS Certificate Manager (ACM) for access control.</p>
 </li>
 <li>
-<p>AWS Certificate Manager (ACM) for access control.</p>
+<p>A Lambda function to convert and import the certificate into ACM.</p>
 </li>
 <li>
-<p>A Lambda function to convert and import the certificate into ACM</p>
+<p>Amazon Route 53 private hosted zone for internal Domain Name System (DNS) lookups within the VPC.</p>
 </li>
 </ul>
 </div>
@@ -1042,10 +1017,10 @@ instances for content delivery, content management, and identity server.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://qs_launch_permalink">Deploy Sitecore into a new VPC</a>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys Sitecore into this new VPC.</p>
+<p><a href="https://fwd.aws/5zrWA?">Deploy Sitecore into a new VPC</a>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys Sitecore into this new VPC.</p>
 </li>
 <li>
-<p><a href="http://qs_launch_permalink">Deploy Sitecore into an existing VPC</a>. This option provisions Sitecore in your existing AWS infrastructure.</p>
+<p><a href="https://fwd.aws/QBeXG?">Deploy Sitecore into an existing VPC</a>. This option provisions Sitecore in your existing AWS infrastructure.</p>
 </li>
 </ul>
 </div>
@@ -1055,11 +1030,10 @@ instances for content delivery, content management, and identity server.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_pre_deployment_steps">Pre deployment steps</h2>
+<h2 id="_predeployment_steps">Predeployment steps</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Quick Start requires that you <a href="https://dev.sitecore.net/">sign up with Sitecore</a> to obtain the Sitecore XM
-resource files.</p>
+<p>This Quick Start requires that you <a href="https://dev.sitecore.net/">sign up with Sitecore</a> to obtain the Sitecore XM resource files.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1068,7 +1042,7 @@ resource files.</p>
 Sitecore partner for a full Sitecore license.</p>
 </li>
 <li>
-<p>Upload the license file to an S3 bucket into a prefix called “license.”</p>
+<p>Upload the license file to an S3 bucket into a <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html">prefix</a> called <code>license</code>.</p>
 </li>
 <li>
 <p><a href="https://dev.sitecore.net/Downloads/Sitecore_Experience_Platform/">Download the Sitecore XM1 scaled installation files.</a></p>
@@ -1076,12 +1050,12 @@ Sitecore partner for a full Sitecore license.</p>
 <li>
 <p>Extract the contents of the .zip file, but don’t extract any of the resulting .zip files. Using
 the same S3 bucket as the license file, upload these extracted files into a prefix called
-“resources.”</p>
+<code>resources</code>.</p>
 </li>
 <li>
 <p>Create a certificate in Amazon Certificate Manager (ACM) for your Sitecore deployment
 in the Region where you deploy the Quick Start. This certificate must be created as a
-wildcard certificate for your Sitecore domain (for example, *.example.com).</p>
+wildcard certificate for your Sitecore domain (e.g, <code>*.example.com</code>).</p>
 </li>
 </ol>
 </div>
@@ -1096,9 +1070,19 @@ or cluster when deploying this Quick Start.</p>
 <div class="sect1">
 <h2 id="_deployment_steps">Deployment steps</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>After clicking the <strong>Deploy</strong> link on the Quick Start landing page, you will be brought to the <a href="https://console.aws.amazon.com/cloudformation">CloudFormation console</a>, with the template URL pre-populated. Ensure you are in the correct Region and click <strong>Next</strong> to enter parameter values.</p>
-</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Sign in to your AWS account, and launch this Quick Start, as described under <a href="#_deployment_options">Deployment options</a>. The AWS CloudFormation console opens with a prepopulated template. Deployment takes about 1–1.5 hours to complete.</p>
+</li>
+<li>
+<p>Choose the correct AWS Region, and then choose <strong>Next</strong>.</p>
+</li>
+<li>
+<p>On the <strong>Create stack</strong> page, keep the default setting for the template URL, and then choose <strong>Next</strong>.</p>
+</li>
+<li>
+<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary. When you finish reviewing and customizing the parameters, choose <strong>Next</strong>.</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1106,48 +1090,46 @@ or cluster when deploying this Quick Start.</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Unless you are customizing the Quick Start templates for your own deployment projects, keep the default settings for the parameters <strong>Quick Start S3 bucket name</strong>, <strong>Quick Start S3 bucket Region</strong>, and <strong>Quick Start S3 key prefix</strong>. Changing these settings automatically updates code references to point to a new Quick Start location. For more information, see the <a href="https://aws-quickstart.github.io/option1.html" target="_blank" rel="noopener">AWS Quick Start Contributor’s Guide</a>.
+Unless you are customizing the Quick Start templates for your own projects, don&#8217;t change the default settings for the following Amazon Simple Storage Service (Amazon S3) parameters: <strong>Quick Start S3 bucket name</strong>, <strong>Quick Start S3 bucket Region</strong>, and <strong>Quick Start S3 key prefix</strong>. Changing these settings automatically updates code references to point to a new Quick Start location. For more information, refer to the <a href="https://fwd.aws/NwqYA?" target="_blank" rel="noopener">AWS Quick Start Contributor&#8217;s Guide</a>.
 </td>
 </tr>
 </table>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>On the <strong>Configure stack options</strong> page, you can <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html" target="_blank" rel="noopener">specify tags</a> (key-value pairs) for resources in your stack and <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-add-tags.html" target="_blank" rel="noopener">set advanced options</a>. When you finish, choose <strong>Next</strong>.</p>
 </li>
 <li>
-<p>On the <strong>Review</strong> page, review and confirm the template settings. Under <strong>Capabilities</strong>, select the two check boxes to acknowledge that the template creates IAM resources and might require the ability to automatically expand macros.</p>
+<p>On the <strong>Review</strong> page, review and confirm the template settings. Under <strong>Capabilities</strong>, select the two check boxes to acknowledge that the template creates IAM resources that might require the ability to automatically expand macros.</p>
 </li>
 <li>
 <p>Choose <strong>Create stack</strong> to deploy the stack.</p>
 </li>
 <li>
-<p>Monitor the status of the stack. When the status is <strong>CREATE_COMPLETE</strong>, the Sitecore XM deployment is ready.</p>
+<p>Monitor the stack&#8217;s status, and when the status is <strong>CREATE_COMPLETE</strong>, the Sitecore XM deployment is ready.</p>
 </li>
 <li>
-<p>To view the created resources, see the values displayed in the <strong>Outputs</strong> tab for the stack.</p>
+<p>To view the created resources, choose the <strong>Outputs</strong> tab.</p>
 </li>
 </ol>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_post_deployment_steps">Post deployment steps</h2>
+<h2 id="_postdeployment_steps">Postdeployment steps</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_create_dns_entries">Create DNS Entries</h3>
+<h3 id="_create_dns_entries">Create DNS entries</h3>
 <div class="paragraph">
-<p>Once the Quick Start deployment completes successfully, create DNS entries in your
-internet-facing DNS for the content delivery, content management, and identity servers.
-These CNAME entries correspond to the names provided in the initial parameters for the
-deployment and point to the listed <code>ExternalALBDNS</code> value in the outputs for <code>SitecoreStack</code>.</p>
+<p>After deploying the Quick Start, add DNS CNAME records to your internet-facing DNS for the Sitecore content delivery, content management, and identity servers.
+These records correspond to the <code>CDDNSName</code>, <code>CMDNSName</code>, and <code>ISDNSName</code> deployment parameters. They point to the DNS name of the external facing ALB (<code>ExternalALBDNS</code> in the <code>SitecoreStack</code> deployment outputs).</p>
 </div>
 <div class="paragraph">
-<p>If you deploy this Quick Start into an existing VPC using your self-managed DNS, you must
+<p>If you deploy this Quick Start into an existing VPC using a self-managed DNS, you must
 create DNS CNAME entries for the Sitecore roles. The required CNAME host name and
 corresponding load balancer DNS can be found in the outputs of <code>RolesStack</code> and <code>SitecoreStack</code>,
-respectively.</p>
+respectively. When it’s updated, log in to the instance that hosts the marketing automation
+role, and start the Sitecore marketing automation Windows service.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1157,7 +1139,7 @@ respectively.</p>
 </div>
 <div class="paragraph">
 <p>To log in to Sitecore, retrieve the administrator password by opening AWS Secrets Manager
-from within the Region where you deployed this Quick Start. Search for “sitecoreadmin” to
+from within the Region where you deployed this Quick Start. Search for <code>sitecoreadmin</code> to
 find the password value.</p>
 </div>
 <div class="paragraph">
@@ -1192,7 +1174,7 @@ deployed load balancers.</p>
 <h4 id="_personalized_content_on_sitecore_roles">Personalized content on Sitecore roles</h4>
 <div class="paragraph">
 <p>Once the deployment of the Sitecore Quick Start is complete, you have a default installation
-of Sitecore XM in your AWS account. Your custom Sitecore site must then be deployed to
+of Sitecore XP in your AWS account. Your custom Sitecore site must then be deployed to
 the Sitecore roles. Any media for your site (for example, pictures and videos) should be
 stored within an S3 bucket and referenced within the website’s code. Storing local media
 content through Sitecore roles should be avoided because it can increase the load on your
@@ -1205,8 +1187,8 @@ a new instance.</p>
 <div class="paragraph">
 <p>All Sitecore role installations are done via the Sitecore Installation Framework (SIF). Using
 SIF allows parameters to be passed to the Sitecore role installation when the instance starts
-for the first time. All of these parameters are stored within AWS Systems Manager
-Parameter Store. If any of the values within Parameter Store are updated, the instances can
+for the first time. These parameters are stored in AWS Systems Manager
+Parameter Store. If any of these parameter values in Parameter Store are updated, the instances can
 be deleted so that when the instance starts up, the Sitecore installation uses the updated
 parameter values. For example, this could be used to update the Solr URL or Solr Core
 prefix for the Sitecore roles.</p>
@@ -1268,7 +1250,7 @@ Store.</p>
 <p><strong>Q.</strong> I encountered a <strong>CREATE_FAILED</strong> error when I launched the Quick Start.</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with <strong>Rollback on failure</strong> set to <strong>No</strong>. (This setting is under <strong>Advanced</strong> in the AWS CloudFormation console, <strong>Options</strong> page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in %ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log.)</p>
+<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with <strong>Rollback on failure</strong> set to <strong>No</strong>. (This setting is under <strong>Advanced</strong> in the AWS CloudFormation console, <strong>Options</strong> page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in <code>%ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log</code>.)</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -1342,16 +1324,13 @@ existing license by uploading a new Sitecore license into the S3 bucket and pref
 <div class="paragraph">
 <p>For troubleshooting common Quick Start issues visit the <a href="http://general-content-file">AWS Quick Start General Content Guide</a> or the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html">Troubleshooting CloudFormation</a> page in the AWS documentation.</p>
 </div>
-<div class="paragraph">
-<p>After you successfully deploy a Quick Start, confirm that your resources and services are updated and configured — including any required patches — to meet your security and other needs. For more information, see the <a href="https://aws.amazon.com/compliance/shared-responsibility-model/">AWS Shared Responsibility Model</a>.</p>
-</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_feedback">Feedback</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>For submitting any issues on the Deployment Guide Documentation, please see here:</p>
+<p>To submit feature ideas and report bugs, use the <strong>Issues</strong> section of the <a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm" target="_blank" rel="noopener">GitHub repository</a> for this Quick Start. To submit code, refer to the <a href="https://fwd.aws/NwqYA?" target="_blank" rel="noopener">Quick Start Contributor&#8217;s Guide</a>. To submit feedback on this deployment guide, use the following GitHub links:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1359,13 +1338,13 @@ existing license by uploading a new Sitecore license into the S3 bucket and pref
 <p><a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm/issues/new?labels=documentation,grammar+or+spelling&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Grammar or spelling</a></p>
 </li>
 <li>
-<p><a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm/issues/new?labels=documentation,broken+link&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Broken Link</a></p>
+<p><a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm/issues/new?labels=documentation,broken+link&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Broken link</a></p>
 </li>
 <li>
 <p><a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm/issues/new?labels=documentation,inaccurate+content&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Inaccurate content</a></p>
 </li>
 <li>
-<p><a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm/issues/new?labels=documentation,display+and+design&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Display and design</a></p>
+<p><a href="https://github.com/aws-quickstart/quickstart-aws-sitecore-xm/issues/new?labels=documentation,display+and+design&amp;title=Deployment+guide+feedback&amp;body=Section+heading:%0ADocumentation+issue+description:%0A" target="_blank" rel="noopener">Display or design</a></p>
 </li>
 </ul>
 </div>
@@ -1375,10 +1354,10 @@ existing license by uploading a new Sitecore license into the S3 bucket and pref
 <h2 id="_notices">Notices</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This document is provided for informational purposes only. It represents AWS’s current product offerings and practices as of the date of issue of this document, which are subject to change without notice. Customers are responsible for making their own independent assessment of the information in this document and any use of AWS’s products or services, each of which is provided “as is” without warranty of any kind, whether expressed or implied. This document does not create any warranties, representations, contractual commitments, conditions, or assurances from AWS, its affiliates, suppliers, or licensors. The responsibilities and liabilities of AWS to its customers are controlled by AWS agreements, and this document is not part of, nor does it modify, any agreement between AWS and its customers.</p>
+<p>This document is provided for informational purposes only. It represents current AWS product offerings and practices as of the date of issue of this document, which are subject to change without notice. Customers are responsible for making their own independent assessment of the information in this document and any use of AWS products or services, each of which is provided "as is" without warranty of any kind, whether expressed or implied. This document does not create any warranties, representations, contractual commitments, conditions, or assurances from AWS, its affiliates, suppliers, or licensors. The responsibilities and liabilities of AWS to its customers are controlled by AWS agreements, and this document is not part of, nor does it modify, any agreement between AWS and its customers.</p>
 </div>
 <div class="paragraph">
-<p>The software included with this paper is licensed under the Apache License, version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at <a href="http://aws.amazon.com/apache2.0/" target="_blank" rel="noopener">http://aws.amazon.com/apache2.0/</a> or in the accompanying "license" file. This code is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied. See the License for specific language governing permissions and limitations.</p>
+<p>The software included with this paper is licensed under the Apache License, version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at <a href="http://aws.amazon.com/apache2.0/" target="_blank" rel="noopener">http://aws.amazon.com/apache2.0/</a> or in the accompanying "license" file. This code is distributed on an "as is" basis, without warranties or conditions of any kind, either expressed or implied. Refer to the License for specific language governing permissions and limitations.</p>
 </div>
 </div>
 </div>
@@ -1386,10 +1365,17 @@ existing license by uploading a new Sitecore license into the S3 bucket and pref
 <footer>
     <p class="footer-text">
         <!-- We can use document attributes: -->
-        <!-- Generated with Asciidoctor v2.0.16. -->
+        <!-- Generated with Asciidoctor v2.0.17. -->
         <a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> |
         &copy; 2022, Amazon Web Services, Inc. or its affiliates. All rights reserved.
     </p>
 </footer>
 </body>
 </html>
+<!--
+repo commit:
+545320d8ffaaab6219e5a14e54e7f7b2082f5576
+
+submodule config:
+ 4ef16b77d6020a462feba269030c80f9088e6d1b docs/boilerplate (heads/main)
+-->
