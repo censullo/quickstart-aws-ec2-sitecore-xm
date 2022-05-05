@@ -1,9 +1,8 @@
-# quickstart-aws-sitecore-xm
-## Sitecore XM on AWS
+# Sitecore Experience Manager (XM) on AWS — Quick Start
 
-The Sitecore Experience Manager (XM) is a content management system (CMS) for web content that automates marketing to deliver a personalized user experience. This Quick Start is intended for organizations that want to deploy a multirole Sitecore XM architecture on the AWS Cloud. 
+For architectural details, step-by-step instructions, and customization options, see the [deployment guide](https://fwd.aws/n9N4D?).
 
-Supported versions <=10.2
+To post feedback, submit feature ideas, or report bugs, use the Issues section of this GitHub repo.
 
 It deploys 3 roles that compose the complete Sitecore XM platform. All of the roles are deployed into individual Auto Scaling groups to ensure recoverability when an instance fails. Database services are provided by SQL Server through Amazon Relational Database Service (Amazon RDS), and caching is managed by Redis on Amazon ElastiCache.
 
